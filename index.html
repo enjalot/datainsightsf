@@ -53,21 +53,6 @@ float[2] latlon2xy(float lat, float lon)
     float my = (mmax[1] - mxy[1]) / mh;
     float[] xy = { mx * smax[0], my * smax[1] };
     return xy;
-
-/*
-    //Lon = x, Lat = y
-    //width and height in latlon
-    float llw = llmax[1] - llmin[1];
-    float llh = llmax[0] - llmin[0];
-    float llx = (lon - llmin[1]) / llw;
-    //float lly = (lon - llmin[1]) / llh;
-    lly = (llmax[0] - lat) / llh;
-    float[] xy = { llx * smax[0], lly * smax[1] };
-    //hacking to get things in place, we should really do correct projection
-    //xy[0] += 50;
-    xy[1] += 40;
-    return xy;
-*/
 }
 
 
@@ -105,7 +90,7 @@ void draw()
     //drawCircle(400, 400, 50, 50);
 
     //Tally
-    float[2] xy = latlon2xy(30.4502, -84.29503);
+    float[2] xy = latlon2xy(30.438256,-84.280733);
     drawCircle(xy[0], xy[1], 10, 10);
     //SFO
 	fill(0, 200, 0);
@@ -122,18 +107,6 @@ void drawCircle(float x, float y, float w, float h)
 {
     ellipse(x, y, w, h);
 }
-
-// Map the size of the ellipse to the data value
-/*
-void drawData(float x, float y, String abbrev) {
-	// Get data value for state
-	float value = dataTable.getFloat(abbrev, 1);
-	// Re-map the value to a number between 2 and 40
-	float mapped = map(value, dataMin, dataMax, 2, 40);
-	// Draw an ellipse for this item
-	ellipse(x, y, mapped, mapped); 
-}
-*/
 
 </script><canvas></canvas>
 <div style="height:0px;width:0px;overflow:hidden;"><img src='map.png' id='map.png'/></div>
