@@ -68,6 +68,9 @@ void draw()
     */
     drawCircle(400, 400, 50, 50);
 
+    float[2] xy = latlon2xy(-84.29503, 30.4502);
+    drawCircle(xy[0], xy[1], 50, 50);
+
 }
 
 void drawCircle(float x, float y, float w, float h)
