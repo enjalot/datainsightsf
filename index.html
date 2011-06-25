@@ -1,0 +1,80 @@
+<html> <head>
+<title>Data Insight: Team 11</title>
+<link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="processing.js"></script>
+<script type="text/javascript" src="init.js"></script>
+<script type="text/javascript" src="data.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+<!-- `<script type="text/javascript" src="jquery.pack.js"></script> -->
+
+</head>
+<body>
+
+<script type="text/javascript">
+    //testing Factual
+    console.log("ADSF");
+    //$.get('http://api.factual.com/v2/tables/s4OOB4/read?APIKey=SUpqo83Vl2tXlQY6YJmiOk0C2QTStJsboqb0zZVzY3KLItz8Q7ewEz4pFqitrf1Z&filters={"latitude":{"$blank":false},"$search":["Tallahassee"]}&sort={"factual_id":1}', function(result){
+        //console.log(result);
+    //}
+    var fact = 'http://api.factual.com/v2/tables/s4OOB4/read?APIKey=SUpqo83Vl2tXlQY6YJmiOk0C2QTStJsboqb0zZVzY3KLItz8Q7ewEz4pFqitrf1Z&filters={"latitude":{"$blank":false},"$search":["Tallahassee"]}&sort={"factual_id":1}';
+    $.getJSON(fact, function(json) {
+        console.log(json);    
+    });
+</script>
+
+
+<script type="application/processing">
+PImage mapImage;
+var dataMin = Number.MAX_VALUE;
+var dataMax = Number.MIN_VALUE;
+
+void setup() 
+{
+	size(823, 817);
+	mapImage = loadImage("map.png");
+
+}
+
+void draw() 
+{
+
+	background(255);
+	image(mapImage, 0, 0); 
+	// Drawing attributes for the ellipses.
+	smooth( );
+	fill(192, 0, 0);
+	noStroke( );
+
+    /*
+	for (int row = 0; row < rowCount; row++) {
+		String abbrev = dataTable.getRowName(row);
+		float x = locationTable.getFloat(abbrev, 1);
+		float y = locationTable.getFloat(abbrev, 2);
+		drawData(x, y, abbrev);
+	}	
+    */
+    drawCircle(400, 400, 50, 50);
+
+}
+
+void drawCircle(float x, float y, float w, float h)
+{
+    ellipse(x, y, w, h);
+}
+
+// Map the size of the ellipse to the data value
+/*
+void drawData(float x, float y, String abbrev) {
+	// Get data value for state
+	float value = dataTable.getFloat(abbrev, 1);
+	// Re-map the value to a number between 2 and 40
+	float mapped = map(value, dataMin, dataMax, 2, 40);
+	// Draw an ellipse for this item
+	ellipse(x, y, mapped, mapped); 
+}
+*/
+
+</script><canvas></canvas>
+<div style="height:0px;width:0px;overflow:hidden;"><img src='map.png' id='map.png'/></div>
+</body> </html>
+
