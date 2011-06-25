@@ -12,14 +12,8 @@
 
 <script type="text/javascript">
     //testing Factual
-    console.log("ADSF");
-    //$.get('http://api.factual.com/v2/tables/s4OOB4/read?APIKey=SUpqo83Vl2tXlQY6YJmiOk0C2QTStJsboqb0zZVzY3KLItz8Q7ewEz4pFqitrf1Z&filters={"latitude":{"$blank":false},"$search":["Tallahassee"]}&sort={"factual_id":1}', function(result){
-        //console.log(result);
-    //}
-    var fact = 'http://api.factual.com/v2/tables/s4OOB4/read?APIKey=SUpqo83Vl2tXlQY6YJmiOk0C2QTStJsboqb0zZVzY3KLItz8Q7ewEz4pFqitrf1Z&filters={"latitude":{"$blank":false},"$search":["Tallahassee"]}&sort={"factual_id":1}';
-    $.getJSON(fact, function(json) {
-        console.log(json);    
-    });
+    console.log("Testing");
+    //factual_query();
 </script>
 
 
@@ -27,6 +21,14 @@
 PImage mapImage;
 var dataMin = Number.MAX_VALUE;
 var dataMax = Number.MIN_VALUE;
+
+float[] bbmin = { -126.6, 14.3 };
+float[] bbmax = { -68.6, 56.1 };
+
+xy = latlon2xy(float lat, float lon)
+{
+}
+
 
 void setup() 
 {
