@@ -22,17 +22,28 @@ PImage mapImage;
 var dataMin = Number.MAX_VALUE;
 var dataMax = Number.MIN_VALUE;
 
-float[] bbmin = { -126.6, 14.3 };
-float[] bbmax = { -68.6, 56.1 };
+//screen min and max
+float[] smin = {0, 0};
+float[] smax = {823, 817};
+//latlon min and max
+float[] llmin = { -126.6, 14.3 };
+float[] llmax = { -68.6, 56.1 };
 
-xy = latlon2xy(float lat, float lon)
+float[2] latlon2xy(float lat, float lon)
 {
+    //width and height in latlon
+    float llw = llmax[0] - llmin[0];
+    float llh = llmax[1] - llmin[1];
+    float llx = (lat - llmin[0]) / llw;
+    float lly = (lon - llmin[1]) / llh;
+    float[] xy = { llx * smax[0], lly * smax[1] };
+    return xy;
 }
 
 
 void setup() 
 {
-	size(823, 817);
+	size(smax[0], smax[1]);
 	mapImage = loadImage("map.png");
 
 }
