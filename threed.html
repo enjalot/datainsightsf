@@ -10,7 +10,7 @@
 <body>
 <div id="glcontainer"></div>
 <script type="text/javascript">
-
+//Three.js setup
     var camera, scene, renderer,
     geometry, material, mesh;
 
@@ -58,6 +58,26 @@
 
     }
  
+    var leftdown = false;
+    //Mouse interaction
+    $('#glcontainer').mousedown(function(evt) {
+        console.log(evt);
+        leftdown = true;
+        console.log("mouse down");
+    });
+    $('#glcontainer').mouseup(function(evt) {
+        console.log(evt);
+        leftdown = false;
+        console.log("mouse up");
+    });
+
+    $('#glcontainer').mousemove(function(evt) {
+        if(leftdown)
+        {        
+          console.log(evt);
+        }   
+    });
+
 
 </script>
 
