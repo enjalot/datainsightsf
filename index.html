@@ -2,6 +2,7 @@
 <title>Data Insight: Team 11</title>
 <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="processing.js"></script>
+<script type="text/javascript" src="proj4js.js"></script>
 <script type="text/javascript" src="init.js"></script>
 <script type="text/javascript" src="data.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
@@ -14,30 +15,59 @@
     //testing Factual
     console.log("Testing");
     //factual_query();
+
+function ll2merc(lat, lon)
+{
+    //var source = new Proj4js.Proj('EPSG:4236');    //source coordinates will be in Longitude/Latitude
+    var source = new Proj4js.Proj('WGS84');    //source coordinates will be in Longitude/Latitude
+    var dest = new Proj4js.Proj('EPSG:900913');     //destination coordinates in Google Mercator
+    var p = new Proj4js.Point(lon,lat);   //any object will do as long as it has 'x' and 'y' properties
+    Proj4js.transform(source, dest, p);    
+   
+    return [p.x, p.y];
+}
+ 
 </script>
 
 
 <script type="application/processing">
 PImage mapImage;
-var dataMin = Number.MAX_VALUE;
-var dataMax = Number.MIN_VALUE;
 
 //screen min and max
 float[] smin = {0, 0};
 float[] smax = {823, 817};
-//latlon min and max
-float[] llmin = { -126.6, 14.3 };
-float[] llmax = { -68.6, 56.1 };
+//lat,lon min and max
+float[] llmin = { 14.3, -126.6};
+float[] llmax = { 56.1, -68.6};
+//mercator bounds
+float[] mmin = { -14093047.534428433, 1608657.4067022006  };
+float[] mmax = { -7636517.068418566, 7578348.637794249 };
 
 float[2] latlon2xy(float lat, float lon)
 {
-    //width and height in latlon
-    float llw = llmax[0] - llmin[0];
-    float llh = llmax[1] - llmin[1];
-    float llx = (lat - llmin[0]) / llw;
-    float lly = (lon - llmin[1]) / llh;
-    float[] xy = { llx * smax[0], lly * smax[1] };
+    float[2] mxy = ll2merc(lat, lon); 
+    float mw = mmax[0] - mmin[0];
+    float mh = mmax[1] - mmin[1];
+    float mx = (mxy[0] - mmin[0]) / mw;
+    //float lly = (lon - llmin[1]) / llh;
+    float my = (mmax[1] - mxy[1]) / mh;
+    float[] xy = { mx * smax[0], my * smax[1] };
     return xy;
+
+/*
+    //Lon = x, Lat = y
+    //width and height in latlon
+    float llw = llmax[1] - llmin[1];
+    float llh = llmax[0] - llmin[0];
+    float llx = (lon - llmin[1]) / llw;
+    //float lly = (lon - llmin[1]) / llh;
+    lly = (llmax[0] - lat) / llh;
+    float[] xy = { llx * smax[0], lly * smax[1] };
+    //hacking to get things in place, we should really do correct projection
+    //xy[0] += 50;
+    xy[1] += 40;
+    return xy;
+*/
 }
 
 
@@ -45,6 +75,12 @@ void setup()
 {
 	size(smax[0], smax[1]);
 	mapImage = loadImage("map.png");
+
+    float[2] xy = latlon2xy(37.77493,-122.419415);
+    console.log(xy);
+    float[2] xy = latlon2xy(30.4502, -84.29503);
+    console.log("hello from processing");
+    console.log(xy);
 
 }
 
@@ -66,10 +102,19 @@ void draw()
 		drawData(x, y, abbrev);
 	}	
     */
-    drawCircle(400, 400, 50, 50);
+    //drawCircle(400, 400, 50, 50);
 
-    float[2] xy = latlon2xy(-84.29503, 30.4502);
-    drawCircle(xy[0], xy[1], 50, 50);
+    //Tally
+    float[2] xy = latlon2xy(30.4502, -84.29503);
+    drawCircle(xy[0], xy[1], 10, 10);
+    //SFO
+	fill(0, 200, 0);
+    xy = latlon2xy(37.77493,-122.419415);
+    drawCircle(xy[0], xy[1], 10, 10);
+    //NYC
+    fill(0, 0, 200);
+    xy = latlon2xy(40.714353,-74.005973);
+    drawCircle(xy[0], xy[1], 10, 10);
 
 }
 
