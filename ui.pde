@@ -1,3 +1,48 @@
+int spacing = 16;
+float ybw = 10;
+float ybh = 10;
+
+
+
+void drawUI()
+{
+    fill(0, 0, 0, 255);
+    stroke(200, 200, 200, 150);
+    rect(bbmin[0], bbmin[1], bbsize[0], bbsize[1]);
+
+    fill(200, 200, 200, 150);
+    stroke(200, 200, 200, 150);
+    textFont(createFont("Arial Black",32));
+    text("CATEGORY", 31, bbmin[1] + 24);
+
+
+    fill(200, 200, 200, 255);
+    textFont(createFont("Helvetica",24));
+    String cat = categories[ca.active];
+    //category name
+    text(cat, 31, 144);
+
+    //arrow
+    stroke(255, 240, 240, 255);
+    fill(255, 240, 240, 255);
+    line(31, 155, bbmin[0] - 65, 155);
+    
+
+    fill(200, 200, 200, 100);
+    //percent
+    textFont(createFont("Arial Black",80));
+    text((int)percent.get(cat)[year] + "%", 31, 240);
+
+    //warning signs
+    textFont(createFont("Helvetica",14));
+    text(symptoms.get(cat), 31, 278);
+
+    //instructions
+    text("Move the mouse within the bounding box to view the behavior", bbmin[0], bbmin[1] + bbsize[1] + 14);
+    text("associated with the type of abuse", bbmin[0], bbmin[1] + bbsize[1] + 28);
+
+
+}
 
 class Bubble {
   float x;
@@ -124,10 +169,7 @@ class CatAxis {
     this.h = h;
     //console.log(x + ' : ' + y + ' : ' + w + ' : ' + h);
 
-    int spacing = 25;
     float min = x - spacing/3.;
-    float ybw = 20;
-    float ybh = 20;
     float[4] ocolor = {200, 200, 200, 100};
     float[4] tcolor = {200, 200, 200, 200};
     for(int i = 0; i < catbubbles.length; i++)

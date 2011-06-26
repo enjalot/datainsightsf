@@ -13,6 +13,13 @@ void initData()
     years = { 2000, 2001, 2002, 2003, 2004, 2005 };
     categories = {'medical', 'emotional', 'sexual', 'physical', 'neglect', 'unkown'};
 
+    symptoms.put('neglect', "");
+    symptoms.put('physical', "");
+    symptoms.put('sexual', "");
+    symptoms.put('emotional', "");
+    symptoms.put('medical', "");
+    symptoms.put('unkown', "");
+
     float[12] Neglect = {338770,49.1,517118,59.8,518014,57.3,525131,58.53,550178,61.59,518519,59.13,564765,62.79};
     float[12] Physical = {186801,27,167713,19.4,168510,18.6,167168,18.63,164689,18.44,151108,17.23,149319,16.6};
     float[12] Sexual = {119506,17.3,87770,10.2,86857,9.6,88688,9.89,87078,9.75,83221,9.49,83810,9.32};

@@ -4,8 +4,9 @@ float[] smax = {800, 480};
 //background image
 PImage bg_image;
 
-float[] bbmin = {0, 0};
-float[] bbmax = {800, 480};
+float[] bbsize = {387, 355};
+float[] bbmin = {390, 60};
+float[] bbmax = {bbmin[0] + bbsize[0], bbmin[0] + bbsize[1]};
 
 
 //HScrollbar hsyear, hstype;
@@ -29,7 +30,7 @@ year = 2;
 tpf = 0;      //time per frame
 cycle = 0;    //keep track of where we are in an animation cycle
 
-float[2] main_anchor = {400, 240};
+float[2] main_anchor = {bbmin[0] + bbsize[0]/2, bbmin[1] + bbsize[1]/2};
 
 void setup() 
 {
@@ -38,12 +39,13 @@ void setup()
     //don't loop for now
     //noLoop();
     frameRate(30);
+    console.log(PFont.list());
 
 	  //bg_image = loadImage("bg.png");
     //hsyear = new HScrollbar(0, 20, width, 10, 6);
     //hstype = new HScrollbar(0, 20, width, 10, 6);
     //ya = new YearAxis(0, smax[1] - 50, smax[0], smax[1] - 50);
-    ca = new CatAxis(0, 50, 200, 50);
+    ca = new CatAxis(233, bbmin[1] + 20, 100, bbmin[1] + 20);
     
     N = 150;
     /* 
@@ -91,6 +93,7 @@ void draw()
 {
     background(0, 0, 0, 255);
     colorMode(RGB,255,255,255,255);
+    drawUI();
 	  //image(bg_image, 0, 0); 
     //hsyear.update();
     //hsyear.display();
@@ -126,6 +129,8 @@ void keyPressed()
   }
 }
 
+
+
 void drawByYear(int offset)
 {
     smooth();
@@ -157,6 +162,7 @@ void drawByYear(int offset)
 void mousePressed() 
 {
   //ya.restart();
+  console.log(mouseX + " " + mouseY);
 }
 
 void mouseMoved()
