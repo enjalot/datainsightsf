@@ -10,6 +10,14 @@ void drawUI()
     stroke(200, 200, 200, 150);
     rect(bbmin[0], bbmin[1], bbsize[0], bbsize[1]);
 
+
+    //year
+    fill(200, 200, 200, 150);
+    textFont(createFont("Arial Black",12));
+    text(years[year], bbmax[0] - textWidth("" +years[year]), 54);
+
+
+
     fill(200, 200, 200, 150);
     stroke(200, 200, 200, 150);
     textFont(createFont("Arial Black",32));

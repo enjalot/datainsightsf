@@ -56,7 +56,8 @@ class Kid
       col[3] = 100;
       tribal = .01;
       other = 10;
-      mouse = 60;
+      mouse = -1;
+      space_scale = 25;
     }
     else if(type == 'physical')
     {
@@ -72,7 +73,7 @@ class Kid
       col[3] = 100;
       tribal = .001;
       other = -.001;
-      mouse = 10;
+      mouse = 20;
     }
     else if(type == 'emotional')
     {
@@ -81,7 +82,9 @@ class Kid
       tribal = .001;
       other = -.001;
       sscale = 20;
-      mouse = .1;
+      mouse = 1;
+      sscale = 100;
+      space_scale = 20;
     }
     else if(type == 'medical')
     {
