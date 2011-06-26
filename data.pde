@@ -13,12 +13,20 @@ void initData()
     years = { 2000, 2001, 2002, 2003, 2004, 2005 };
     categories = {'medical', 'emotional', 'sexual', 'physical', 'neglect', 'unkown'};
 
-    symptoms.put('neglect', "");
-    symptoms.put('physical', "");
-    symptoms.put('sexual', "");
-    symptoms.put('emotional', "");
-    symptoms.put('medical', "");
-    symptoms.put('unkown', "");
+    symptoms.put('neglect', {"Hygiene is consistently bad",
+                              "Untreated illnesses and physical injuries",
+                              "Clothes are ill-fitting, filthy, or inappropriate\nfor the weather"});
+    symptoms.put('physical', {"Frequent unexplained bruises, burns, or cuts", 
+                              "Wears inappropriate clothing to hide injuries",
+                              "Shies away from touch, flinches at sudden\nmovements"});
+    symptoms.put('sexual', {"Trouble walking or sitting",
+                            "Experiences a sudden change in appetite",
+                            "Displays knowledge or interest in sexual acts\ninappropriate for age"});
+    symptoms.put('emotional', {"Withdrawn, fearful, or anxious",
+                                "Extremely compliant, demanding",
+                                "Unattached to the parent or caregiver"});
+    symptoms.put('medical', {"Chronic illness","Significantly underweight","Dental needs go untreated"});
+    symptoms.put('unkown', {"Shrinks at the approach of adults","Delayed in physical or emotional development", "Abuses alcohol or other drugs"});
 
     float[12] Neglect = {338770,49.1,517118,59.8,518014,57.3,525131,58.53,550178,61.59,518519,59.13,564765,62.79};
     float[12] Physical = {186801,27,167713,19.4,168510,18.6,167168,18.63,164689,18.44,151108,17.23,149319,16.6};

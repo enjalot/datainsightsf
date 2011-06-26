@@ -24,6 +24,7 @@ HashMap positions = new HashMap();
 HashMap colors = new HashMap();
 HashMap frequency = new HashMap();
 HashMap percent = new HashMap();
+HashMap symptoms = new HashMap();
 HashMap kids = new HashMap();
 
 year = 2;
@@ -47,7 +48,7 @@ void setup()
     //ya = new YearAxis(0, smax[1] - 50, smax[0], smax[1] - 50);
     ca = new CatAxis(233, bbmin[1] + 20, 100, bbmin[1] + 20);
     
-    N = 150;
+    N = 100;
     /* 
     float[2] neglect = {200, 100};
     float[2] physical = {400, 100};

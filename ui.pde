@@ -34,8 +34,21 @@ void drawUI()
     text((int)percent.get(cat)[year] + "%", 31, 240);
 
     //warning signs
+    fill(200, 200, 200, 150);
+    textFont(createFont("Helvetica",20));
+    text("Signs", 31, 290);
+
+    String signs[] = symptoms.get(cat);
+    textLeading(19);
     textFont(createFont("Helvetica",14));
-    text(symptoms.get(cat), 31, 278);
+    for(int i= 0; i < signs.length; i++)
+    {
+      noStroke();
+      fill(200, 200, 200, 150);
+      ellipse(31, 316 + i * 20, 4, 4);
+      fill(200, 200, 200, 220);
+      text(signs[i], 41, 320 + i * 20);
+    }
 
     //instructions
     text("Move the mouse within the bounding box to view the behavior", bbmin[0], bbmin[1] + bbsize[1] + 14);
