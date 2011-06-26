@@ -22,7 +22,7 @@ cycle = 0;    //keep track of where we are in an animation cycle
 
 void setup() 
 {
-	size(smax[0], smax[1]);
+	  size(smax[0], smax[1]);
     //don't loop for now
     //noLoop();
     frameRate(30);

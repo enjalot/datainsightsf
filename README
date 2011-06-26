@@ -1,0 +1,6 @@
+ca.html - main html file
+setup.pde - setup processing environment and main draw loop
+data.pde - load in data
+ui.pde - control the user interface
+flock.pde - control each type's behavior
+
