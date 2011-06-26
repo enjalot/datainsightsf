@@ -22,9 +22,12 @@ year = 2;
 tpf = 0;      //time per frame
 cycle = 0;    //keep track of where we are in an animation cycle
 
+float[2] main_anchor = {400, 240};
+
 void setup() 
 {
 	  size(smax[0], smax[1]);
+	  //size(smax[0], smax[1], OPENGL);
     //don't loop for now
     //noLoop();
     frameRate(30);
@@ -73,7 +76,7 @@ void setup()
     colors.put('unkown', {0, 200, 200});
 
     initData();
-    initKids(N);
+    initKids(N, 'neglect');
 }
 
 void draw() 
@@ -93,6 +96,25 @@ void draw()
     //drawByYear(0);
     kidloop(kids);
  
+}
+
+void updateKids(String itype)
+{
+  kids = new HashMap();
+  initKids(N, itype);
+}
+
+void keyPressed()
+{
+  console.log(key);
+  if(key == 'p')
+  {
+    updateKids('physical');
+  }
+  if(key == 'e')
+  {
+    updateKids('emotional');
+  }
 }
 
 void drawByYear(int offset)

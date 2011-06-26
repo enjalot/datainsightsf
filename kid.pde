@@ -28,6 +28,7 @@ class Kid
   float[2] alignment = {0,0};
   float[2] separation = {0,0};
   float[2] cohesion = {0,0};
+  float[2] spacing = {0,0};
   float sscale, cscale, ascale;
   float anchor_scale;
   boolean active = false;
@@ -42,53 +43,70 @@ class Kid
     //console.log(type);
     
     sscale = 50;
-    cscale = -.01;//.0001;
+    cscale = .001;//.0001;
     ascale = .01;//.3;
     anchor_scale = -.01;
+    space_scale = 10;
     mouse = 50;
     float alpha = 100;
+    col = {200, 200, 200, 100};
     if(type == 'neglect')
     {
-      col = {123, 211, 247, 150};
+      //col = {123, 211, 247, 150};
+      col[3] = 100;
       tribal = .01;
       other = 10;
+      mouse = 60;
     }
     else if(type == 'physical')
     {
-      col = {111, 44, 145, 220};
+      //col = {111, 44, 145, 220};
+      col[3] = 150;
       tribal = .001;
       other = 10;
+      mouse = 50;
     }
     else if(type == 'sexual')
     {
-      col = {237, 28, 36, 150};
+      //col = {237, 28, 36, 150};
+      col[3] = 100;
       tribal = .001;
       other = -.001;
+      mouse = 10;
     }
     else if(type == 'emotional')
     {
-      col = {205, 129, 154, 220};
+      //col = {205, 129, 154, 220};
+      col[3] = 150;
       tribal = .001;
       other = -.001;
+      sscale = 20;
+      mouse = .1;
     }
     else if(type == 'medical')
     {
-      col = {255, 221, 0, 150};
+      //col = {255, 221, 0, 150};
+      col[3] = 100;
       tribal = .001;
       other = -.001;
+      mouse = .1;
     }
     else if(type == 'unkown')
     {
-      col = {219, 124, 27, 220};
+      //col = {219, 124, 27, 220};
+      col[3] = 150;
       tribal = .001;
       other = -.001;
+      mouse = .1;
     }
   }
 
   public void draw()
   {
-    stroke(col[0], col[1], col[2], 255);
-    fill(col[0], col[1], col[2], col[4]);
+    smooth();
+    noStroke();
+    stroke(col[0], col[1], col[2], 205);
+    fill(col[0], col[1], col[2], col[3]);
     ellipse(pos[0], pos[1], size, size);
   }
 
@@ -139,6 +157,7 @@ class Kid
 
       if(dist < radius)
       {
+        /*
         if(type == kidj.type)
         {
           //tribal behavior
@@ -152,6 +171,7 @@ class Kid
           force[1] += r[1] * others * scale;
 
         }
+        */
 
         //flocking rules
         //separation
@@ -159,6 +179,12 @@ class Kid
         alignment[1] += velocity[1];
         cohesion[0] += kidj.pos[0];
         cohesion[1] += kidj.pos[1];
+
+        if(dist < size * 1.2)
+        {
+          spacing[0] += rs[0] * scale * space_scale;
+          spacing[1] += rs[1] * scale * space_scale;
+        }
         /*
         console.log("kidi.pos "+pos);
         console.log("kidj.pos "+kidj.pos);
@@ -185,6 +211,8 @@ class Kid
     cohesion[1] = 0;
     alignment[0] = 0;
     alignment[1] = 0;
+    spacing[0] = 0;
+    spacing[1] = 1;
     M = 0;
 
   }
@@ -222,6 +250,11 @@ class Kid
       //cohesiont
       velocity[0] += cscale * (cohesion[0] / M - pos[0]);
       velocity[1] += cscale * (cohesion[1] / M - pos[1]);
+
+      velocity[0] += spacing[0] / M;
+      velocity[1] += spacing[1] / M;
+
+
     }
 
 
@@ -248,45 +281,33 @@ class Kid
 
 }
 
-void initKids(int N)
+void initKids(int N, String itype)
 {
   //generate kids using percentage by type
   console.log("init kids");
-  Iterator i = percent.entrySet().iterator();
-  int ii = 0;
   int nkids = 0;
-  while(i.hasNext())
-  {
-      Map.Entry me = (Map.Entry)i.next();
-      //console.log(me.getKey());
-      perc = me.getValue()[year] / 100.;
-      //console.log('percent: ' + perc);
-      int n = (int)(perc * N);
-      /*
-      if(me.getKey()=='neglect')
-      {
-        console.log(me.getKey());
-        n = 2; 
-        */
-      //console.log('n: ' + n);
-      float[2] anchor = anchors.get(me.getKey());
-      float rmax = 50;
-      float rx, ry;
-      for(int k = 0; k < n; k++)
-      {
-        console.log(k);
-        rx = random(-rmax,rmax);
-        ry = random(-rmax,rmax); 
-        float[2] pos = { anchor[0] + rx, anchor[1] + ry };
-        Kid kid = new Kid(pos, me.getKey(), anchor, 20, 80);
-        kids.put(nkids, kid);
-        nkids++;
-      }
-      //}
-      //break;
-      ii++;
-  }
-  console.log("nkids: " + nkids);
+    //console.log(me.getKey());
+    perci = percent.get(itype);
+    perc = perci[year] / 100.;
+    //console.log('percent: ' + perc);
+    int n = (int)(perc * N);
+    //n = 2; 
+    //console.log('n: ' + n);
+    //float[2] anchor = anchors.get(itype);
+    float[2] anchor = main_anchor;
+    float rmax = 50;
+    float rx, ry;
+    for(int k = 0; k < n; k++)
+    {
+      //console.log(k);
+      rx = random(-rmax,rmax);
+      ry = random(-rmax,rmax); 
+      float[2] pos = { anchor[0] + rx, anchor[1] + ry };
+      Kid kid = new Kid(pos, itype, anchor, 20, 80);
+      kids.put(nkids, kid);
+      nkids++;
+    }
+    console.log("nkids: " + nkids);
 }
 
 void kidloop(ArrayList kids)
@@ -326,3 +347,47 @@ void kidloop(ArrayList kids)
 
 
 }
+
+/*
+void initKids(int N, String itype)
+{
+  //generate kids using percentage by type
+  console.log("init kids");
+  Iterator i = percent.entrySet().iterator();
+  int ii = 0;
+  int nkids = 0;
+  while(i.hasNext())
+  {
+      Map.Entry me = (Map.Entry)i.next();
+      //console.log(me.getKey());
+      perc = me.getValue()[year] / 100.;
+      //console.log('percent: ' + perc);
+      int n = (int)(perc * N);
+      ///
+      if(me.getKey()=='neglect')
+      {
+        console.log(me.getKey());
+        n = 2; 
+        ///
+      //console.log('n: ' + n);
+      float[2] anchor = anchors.get(me.getKey());
+      float rmax = 50;
+      float rx, ry;
+      for(int k = 0; k < n; k++)
+      {
+        console.log(k);
+        rx = random(-rmax,rmax);
+        ry = random(-rmax,rmax); 
+        float[2] pos = { anchor[0] + rx, anchor[1] + ry };
+        Kid kid = new Kid(pos, me.getKey(), anchor, 20, 80);
+        kids.put(nkids, kid);
+        nkids++;
+      }
+      }
+      //break;
+      ii++;
+  }
+  console.log("nkids: " + nkids);
+}
+*/
+
