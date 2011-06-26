@@ -23,11 +23,13 @@ class Kid
   float others; //goal or avoid behavior with other types
   float mouse; //avoid behavior with the mouse
 
-  float M = 0; //number of neighbors
+  int M = 0; //number of neighbors
+  int MS = 0;
   float[2] alignment = {0,0};
   float[2] separation = {0,0};
   float[2] cohesion = {0,0};
   float sscale, cscale, ascale;
+  float anchor_scale;
   boolean active = false;
 
   public Kid(pos, type, anchor, size, radius)
@@ -39,44 +41,45 @@ class Kid
     this.radius = radius;
     //console.log(type);
     
-    sscale = .3;
-    cscale = .03;
-    ascale = .03;
-    mouse = 1;
+    sscale = 50;
+    cscale = -.01;//.0001;
+    ascale = .01;//.3;
+    anchor_scale = -.01;
+    mouse = 50;
     float alpha = 100;
     if(type == 'neglect')
     {
-      col = {100, 0, 0, alpha};
-      tribal = .001;
-      other = .001;
+      col = {123, 211, 247, 150};
+      tribal = .01;
+      other = 10;
     }
     else if(type == 'physical')
     {
-      col = {0, 100, 0, alpha};
+      col = {111, 44, 145, 220};
       tribal = .001;
-      other = -.001;
+      other = 10;
     }
     else if(type == 'sexual')
     {
-      col = {0, 0, 100, alpha};
+      col = {237, 28, 36, 150};
       tribal = .001;
       other = -.001;
     }
     else if(type == 'emotional')
     {
-      col = {100, 0, 100, alpha};
+      col = {205, 129, 154, 220};
       tribal = .001;
       other = -.001;
     }
     else if(type == 'medical')
     {
-      col = {100, 100, 0, alpha};
+      col = {255, 221, 0, 150};
       tribal = .001;
       other = -.001;
     }
     else if(type == 'unkown')
     {
-      col = {0, 100, 100, alpha};
+      col = {219, 124, 27, 220};
       tribal = .001;
       other = -.001;
     }
@@ -96,7 +99,7 @@ class Kid
     float dist = sqrt(r[0]*r[0] + r[1]*r[1]);
     float scale = dist / radius;
     //avoid / goal behavior for mouse goes here
-    if(dist < radius)
+    if(dist < .75 * radius)
     {
       //do inside code
       force[0] += r[0] * mouse * scale;
@@ -121,41 +124,53 @@ class Kid
   {
     //Nearest Neighbor Search
     //float dist = distance(pos[0], pos[1], kidj.pos[0], kidj.pos[1]);
-    float[2] r = {pos[0] - kidj.pos[0], pos[1] - kidj.pos[1]};
+    float[2] r = {kidj.pos[0] - pos[0], kidj.pos[1] - pos[1]};
     float dist = sqrt(r[0]*r[0] + r[1]*r[1]);
-    /*
-    console.log("kidi.pos "+pos);
-    console.log("kidj.pos "+kidj.pos);
-    console.log("dist: " + dist);
-    */
+    //normalize r
+    r[0] /= dist;
+    r[1] /= dist;
     float scale = dist / radius;
-    if(dist < radius)
+
+    if(dist < radius * 2)
     {
-      if(type == kidj.type)
+      float[2] rs = {pos[0] - kidj.pos[0], pos[1] - kidj.pos[1]};
+      separation[0] += rs[0] / dist;
+      separation[1] += rs[1] / dist;
+
+      if(dist < radius)
       {
-        //tribal behavior
-        force[0] += r[0] * tribal * scale;
-        force[1] += r[1] * tribal * scale;
+        if(type == kidj.type)
+        {
+          //tribal behavior
+          force[0] += r[0] * tribal * scale;
+          force[1] += r[1] * tribal * scale;
+        }
+        else
+        {
+          //others
+          force[0] += r[0] * others * scale;
+          force[1] += r[1] * others * scale;
+
+        }
+
+        //flocking rules
+        //separation
+        alignment[0] += velocity[0];
+        alignment[1] += velocity[1];
+        cohesion[0] += kidj.pos[0];
+        cohesion[1] += kidj.pos[1];
+        /*
+        console.log("kidi.pos "+pos);
+        console.log("kidj.pos "+kidj.pos);
+        console.log("dist "+dist);
+
+        console.log("cohesion: " + cohesion);
+        console.log("separation: " + separation);
+        */
+
+        M++;
       }
-      else
-      {
-        //others
-        force[0] += r[0] * others * scale;
-        force[1] += r[1] * others * scale;
-
-      }
-
-      //flocking rules
-      //separation
-      separation[0] += sscale * r[0] / dist;
-      separation[1] += sscale * r[1] / dist;
-      alignment[0] += ascale * velocity[0];
-      alignment[1] += ascale * velocity[1];
-      cohesion[0] += -cscale * r[0] / dist;
-      cohesion[1] += -cscale * r[1] / dist;
-
-
-      M++;
+      MS++;
     }
 
   }
@@ -176,21 +191,17 @@ class Kid
 
   public void integrate()
   {
+    if( M > 0 )
+    {
+      force[0] /= M;
+      force[1] /= M;
+    }
     //anchor
     float[2] r = {pos[0] - anchor[0], pos[1] - anchor[1]};
     //console.log(r);
     //float dist = distance(pos[0], pos[1], anchor[0], anchor[1]);
-    float scale = -.01;
-    force[0] += r[0] * scale;// * dist / width;
-    force[1] += r[1] * scale;// * dist / width;
-    //goal behavior
-    //force[0] += r[0] * velocity[0] - velocity[0];//scale * dist / width;
-    //force[1] += r[1] * velocity[0] - velocity[1];//scale * dist / width;
-
-
-
-    //random
-
+    force[0] += r[0] * anchor_scale;// * (2 - dist/1000.);
+    force[1] += r[1] * anchor_scale;// * (2 - dist/1000.);
     //add in the various contributions to the behavior
     velocity[0] += force[0];
     velocity[1] += force[1];
@@ -202,15 +213,15 @@ class Kid
     */
     if ( M > 0 )
     {
-      velocity[0] += alignment[0] / M;// - velocity[0];
-      velocity[1] += alignment[1] / M;// - velocity[1];
+      velocity[0] += ascale * (alignment[0] / M - velocity[0]);
+      velocity[1] += ascale * (alignment[1] / M - velocity[1]);
       //add in the flocking rules
-      velocity[0] += separation[0] / M;
-      velocity[1] += separation[1] / M;
+      velocity[0] += sscale * (separation[0] / MS);
+      velocity[1] += sscale * (separation[1] / MS);
       //console.log("velocity: " + velocity);
       //cohesiont
-      velocity[0] += cohesion[0] / M;// - pos[0];
-      velocity[1] += cohesion[1] / M;// - pos[1];
+      velocity[0] += cscale * (cohesion[0] / M - pos[0]);
+      velocity[1] += cscale * (cohesion[1] / M - pos[1]);
     }
 
 
@@ -226,10 +237,10 @@ class Kid
     //integrate
     pos[0] = pos[0] + velocity[0]*dt;
     pos[1] = pos[1] + velocity[1]*dt;
-    if (pos[0] < smin[0]) { pos[0] = smin[0];}
-    if (pos[1] < smin[1]) { pos[1] = smin[1];}
-    if (pos[0] > smax[0]) { pos[0] = smax[0];}
-    if (pos[1] > smax[1]) { pos[1] = smax[1];}
+    if (pos[0] < smin[0]) { pos[0] = smin[0]; velocity[0] = -velocity[0];}
+    if (pos[1] < smin[1]) { pos[1] = smin[1]; velocity[1] = -velocity[1];}
+    if (pos[0] > smax[0]) { pos[0] = smax[0]; velocity[0] = -velocity[0];}
+    if (pos[1] > smax[1]) { pos[1] = smax[1]; velocity[1] = -velocity[1];}
     //console.log(velocity);
     
   }
@@ -247,25 +258,31 @@ void initKids(int N)
   while(i.hasNext())
   {
       Map.Entry me = (Map.Entry)i.next();
-      String type = me.getKey();
       //console.log(me.getKey());
       perc = me.getValue()[year] / 100.;
       //console.log('percent: ' + perc);
       int n = (int)(perc * N);
-      //n = 2;
+      /*
+      if(me.getKey()=='neglect')
+      {
+        console.log(me.getKey());
+        n = 2; 
+        */
       //console.log('n: ' + n);
-      float[2] anchor = anchors.get(type);
-      float rmax = 80;
+      float[2] anchor = anchors.get(me.getKey());
+      float rmax = 50;
       float rx, ry;
       for(int k = 0; k < n; k++)
       {
+        console.log(k);
         rx = random(-rmax,rmax);
         ry = random(-rmax,rmax); 
         float[2] pos = { anchor[0] + rx, anchor[1] + ry };
-        Kid kid = new Kid(pos, type, anchor, 20, 80);
+        Kid kid = new Kid(pos, me.getKey(), anchor, 20, 80);
         kids.put(nkids, kid);
         nkids++;
       }
+      //}
       //break;
       ii++;
   }
