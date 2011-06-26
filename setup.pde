@@ -11,10 +11,13 @@ float[] bbmax = {800, 480};
 //HScrollbar hsyear, hstype;
 
 
-YearAxis ya;
-YearBubble[6] yearbubbles = new YearBubbles[6];
+//YearAxis ya;
+CatAxis ca;
+Bubble[6] yearbubbles = new Bubble[6];
+Bubble[6] catbubbles = new Bubble[6];
 float[6] years;
 
+String[6] categories = new String[6];
 HashMap anchors = new HashMap();
 HashMap positions = new HashMap();
 HashMap colors = new HashMap();
@@ -39,9 +42,10 @@ void setup()
 	  //bg_image = loadImage("bg.png");
     //hsyear = new HScrollbar(0, 20, width, 10, 6);
     //hstype = new HScrollbar(0, 20, width, 10, 6);
-    ya = new YearAxis(0, smax[1] - 50, smax[0], smax[1] - 50);
+    //ya = new YearAxis(0, smax[1] - 50, smax[0], smax[1] - 50);
+    ca = new CatAxis(0, 50, 200, 50);
     
-    N = 100;
+    N = 150;
     /* 
     float[2] neglect = {200, 100};
     float[2] physical = {400, 100};
@@ -80,7 +84,7 @@ void setup()
     colors.put('unkown', {0, 200, 200});
 
     initData();
-    initKids(N, 'neglect');
+    initKids(N, categories[0]);
 }
 
 void draw() 
@@ -91,6 +95,7 @@ void draw()
     //hsyear.update();
     //hsyear.display();
     //ya.update();
+    ca.update();
 
     cycle++;
     if(cycle >= 50) {cycle = 0 };
@@ -157,6 +162,7 @@ void mousePressed()
 void mouseMoved()
 {
   //ya.inside(mouseX, mouseY);
+  ca.inside(mouseX, mouseY);
 }
 
 void drawCircle(float x, float y, float w, float h)
