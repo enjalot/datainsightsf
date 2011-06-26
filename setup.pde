@@ -4,6 +4,10 @@ float[] smax = {800, 480};
 //background image
 PImage bg_image;
 
+float[] bbmin = {0, 0};
+float[] bbmax = {800, 480};
+
+
 //HScrollbar hsyear, hstype;
 
 

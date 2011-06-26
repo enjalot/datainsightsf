@@ -270,10 +270,10 @@ class Kid
     //integrate
     pos[0] = pos[0] + velocity[0]*dt;
     pos[1] = pos[1] + velocity[1]*dt;
-    if (pos[0] < smin[0]) { pos[0] = smin[0]; velocity[0] = -velocity[0];}
-    if (pos[1] < smin[1]) { pos[1] = smin[1]; velocity[1] = -velocity[1];}
-    if (pos[0] > smax[0]) { pos[0] = smax[0]; velocity[0] = -velocity[0];}
-    if (pos[1] > smax[1]) { pos[1] = smax[1]; velocity[1] = -velocity[1];}
+    if (pos[0] < bbmin[0]) { pos[0] = bbmin[0]; velocity[0] = -velocity[0];}
+    if (pos[1] < bbmin[1]) { pos[1] = bbmin[1]; velocity[1] = -velocity[1];}
+    if (pos[0] > bbmax[0]) { pos[0] = bbmax[0]; velocity[0] = -velocity[0];}
+    if (pos[1] > bbmax[1]) { pos[1] = bbmax[1]; velocity[1] = -velocity[1];}
     //console.log(velocity);
     
   }
