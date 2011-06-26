@@ -76,8 +76,8 @@ void initData()
         freq[i] = Other[2*i];
         perc[i] = Other[2*i+1];
     }
-    frequency.put('other', freq);
-    percent.put('other', perc);
+    frequency.put('unkown', freq);
+    percent.put('unkown', perc);
 
 
 
